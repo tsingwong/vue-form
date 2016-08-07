@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Document</title>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/vue.validator/2.1.5/vue-validator.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style>
+        .content {
+            border: 1px solid #d9d9d9;
+        }
+
+        .myUl {
+            margin-top: 5px;
+            margin-bottom: 0px;
+            padding-left: 80px;
+        }
+
+        .myInput {
+            border: none;
+            width: 100%;
+            line-height: 32px;
+            overflow-x: visible;
+            overflow-y: visible;
+            outline: none;
+        }
+
+        .myInput:focus {
+            border: none;
+            box-shadow: none;
+        }
+
+        .myLi {
+            list-style: none;
+        }
+
+        .myLi:first-child {
+            border-bottom: 1px solid #d9d9d9;
+        }
+
+        .myLabel {
+            position: absolute;
+            left: 20px;
+        }
+
+        .section-2 {
+            margin-top: 10px;;
+        }
+
+        .section-3 {
+            margin-top: 10px;
+        }
+
+        .myButton {
+            background-color: #ff4683;
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            text-align: center;
+            width: 80%;
+            border-radius: 3px;
+            color: #fff;
+            text-decoration: none;
+            margin: 20px auto;
+
+            border: none;
+        }
+
+        .myButton:focus {
+            border: none;
+            box-shadow: none;
+        }
+
+        span {
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .mySelect {
+        }
+
+        /*清除浮动代码*/
+        .clearfloat:after {
+            content: "clear";
+            display: block;
+            clear: both;
+            visibility: hidden;
+            height: 0;
+        }
+
+        .clearfloat {
+            zoom: 1
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div id="app">
+    <validator name="validation1">
+        <section class="section-1">
+            <div class="content">
+                <ul class="myUl">
+                    <li class="myLi">
+                        <span class="myLabel">商家姓名</span><input class="myInput" type="text" placeholder="请输入名称"
+                                                                v-model="info.shopname"
+                                                                v-validate:shopname="['required', 'maxlength20']">
+                    </li>
+                    <li class="myLi">
+                        <span class="myLabel">商家电话</span><input class="myInput" type="text" v-model="info.shopphone"
+                                                                v-validate:shopphone="['required', 'num11']">
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section-2">
+            <div class="content">
+                <div style="padding-left: 80px;">
+                    <span class="myLabel">团购价格</span><input class="myInput" type="text" placeholder="不可点击的"
+                                                            v-model="info.group"
+                                                            v-validate:group="['tentohundred']">
+                </div>
+            </div>
+        </section>
+
+        <section class="section-3">
+            <div class="content">
+                <ul class="myUl">
+                    <li class="myLi clearfloat">
+                        <span class="myLabel">是否打折</span><span class="pull-right"><input class="myInput"
+                                                                                         style="width: 20px; height:20px;"
+                                                                                         type="checkbox"
+                                                                                         v-model="info.discount"
+                                                                                         v-validate:discount="['touched']"></span>
+                    </li>
+                    <li class="myLi">
+                        <span class="myLabel">行业类型</span>
+                        <select name="" id="" class="form-control myInput mySelect" v-model="info.industry"
+                                v-validate:industry="['required']">
+                            <option value=""></option>
+                            <option value="food">餐饮</option>
+                            <option value="manicure">美甲</option>
+                            <option value="travel">旅游</option>
+                            <option value="expressage">快递</option>
+                            <option value="child">亲子</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="section-4">
+            <button class="myButton" v-on:click="sendJson">提交</button>
+        </section>
+    </validator>
+</div>
+
+<!--模态框-->
+<div class="modal fade myModal1" tabindex="1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">警告</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框2-->
+<div class="modal fade myModal2" tabindex="1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">恭喜你</h4>
+            </div>
+            <div class="modal-body">
+                <p>提交成功</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    //    验证规则
+    Vue.validator('required', {
+        message: function (field) {
+            return "必须填写";
+        },
+        check: Vue.validator('required')
+    })
+
+    Vue.validator('maxlength20', {
+        message: function () {
+            return "最大长度为20个字符";
+        },
+        check: function (val) {
+            return (val.length <= 20);
+        }
+    })
+
+    Vue.validator('num11', {
+        message: function () {
+            return "由11位数字组成";
+        },
+        check: function (val) {
+            return (/^[0-9]{11}$/.test(val));
+        }
+    })
+    Vue.validator('tentohundred', {
+        message: function () {
+            return "最小10，最大100";
+        },
+        check: function (val) {
+            return (/^([1-9][0-9]|100)$/.test(val));
+        }
+    })
+    Vue.validator('touched', {
+        message: function () {
+            return ("必填");
+        },
+        check: function (val) {
+            return (
+                    this.touched
+            )
+        }
+    })
+
+    //    初始化用到的数组
+    var initData = {
+        shopname: "",
+        shopphone: "",
+        group: "",
+        discount: false,
+        industry: ""
+    };
+    //    排序用到的参考数组
+    var referenceData = {
+        shopname: "商家名称",
+        shopphone: "商家电话",
+        group: "团购价格",
+        discount: "是否打折",
+        industry: "行业类型"
+    };
+    //    创建vue实例
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            info: {
+                shopname: "",
+                shopphone: "",
+                group: "",
+                discount: false,
+                industry: ""
+            },
+            apiUrl: "somethAPI",
+
+        },
+//        页面初始化
+        ready: function () {
+            this.getJson();
+        },
+        methods: {
+            // 获取后台数据
+            getJson: function () {
+                // 由于作用域问题，需要设置变量that保存当前this
+                var that = this;
+                $.ajax({
+                    type: "GET",
+                    url: this.apiUrl,
+                    success: function (data) {
+                        var obj = JSON.parse(data);
+                        this.$set('info', data);
+                    }
+                });
+            },
+            // 提交表单
+            sendJson: function () {
+                var that = this;
+                var errors = this.$validation1.errors;
+                var sortErrors = {};
+                var html = '';
+                var count = 0;
+
+                // 当存在错误时，输出错误且阻止默认行为
+                if (errors) {
+                    // 错误按顺序排列
+                    for (i in referenceData) {
+                        for (j in errors) {
+                            if (errors[j].field == i) {
+
+                                sortErrors[count] = errors[j];
+                                sortErrors[count].name = referenceData[i];
+                                count++;
+                            }
+                        }
+                    }
+                    // 遍历错误输出
+                    for (i in sortErrors) {
+                        html += "<li>" + sortErrors[i].name + sortErrors[i].message + '</li>';
+                    }
+                    var $ul = $('<ul></ul>');
+                    $ul.html(html);
+                    $(".myModal1 .modal-body").empty();
+                    $(".myModal1 .modal-body").append($ul);
+                    $(".myModal1").modal('show');
+                } else {
+                    // 表单验证符合标准后，ajax发送POST请求
+                    $.ajax({
+                        type: "POST",
+                        data: vm.info,
+                        url: this.apiUrl,
+                        success: function () {
+
+                            $(".myModal2").modal('show');
+                            vm.$set('info', initData);
+                        },
+                        error: function (err, status) {
+                            $(".myModal2").modal('show');
+                            vm.$set('info', initData);
+//                                e.preventDefault();
+                        }
+                    })
+                }
+
+            }
+        }
+    });
+
+</script>
+</body>
+
+
+</html>
